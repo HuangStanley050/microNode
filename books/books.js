@@ -11,6 +11,20 @@ app.get("/", (req, res) => {
   res.send("Book service");
 });
 
+app
+  .get("/books", (req, res) => {
+    Book.find()
+      .then(books => res.json({ books }))
+      .catch(err => console.log(err));
+  })
+  .get("/book/:id", (req, res) => {
+    Book.findById(req.params.id)
+      .then(book => {
+        res.json(book);
+      })
+      .catch();
+  });
+
 app.post("/book", (req, res) => {
   const newBook = Book({
     title: req.body.title,
@@ -18,6 +32,7 @@ app.post("/book", (req, res) => {
     numberPages: req.body.numberPages,
     publisher: req.body.publisher
   });
+
   newBook
     .save()
     .then(() => {
